@@ -25,7 +25,7 @@ SECRET_KEY = 'v)wq3bti=!jv+=-t46%fm&axs+b5+$7-w^^!sht*%q!q-u*y8e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*]
 
 
 # Application definition
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'timetable_final',
+    'rest_framework',
+    'peewee',
 ]
 
 MIDDLEWARE = [
@@ -74,9 +77,20 @@ WSGI_APPLICATION = 'timetable_final.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
+        'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'time_table_test1',
+        'HOST':'',
+        'USER':'root',
+        'PASSWORD':'',
+        'PORT':'3306',
+        'OPTIONS': {
+            'init_command': 'SET innodb_strict_mode=1',
+        },
     }
 }
 
