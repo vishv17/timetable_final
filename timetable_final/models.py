@@ -132,7 +132,7 @@ class subject_scheme(models.Model):
         return self.sub_code+" "+self.sub_load
 
 class faculty(models.Model):
-    faculty_id=models.IntegerField(primary_key=True)
+    faculty_id=models.AutoField(primary_key=True)
     faculty_name=models.CharField(max_length=200)
     position=models.IntegerField()
     work_load=models.IntegerField()
