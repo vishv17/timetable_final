@@ -99,7 +99,7 @@ class semester_lab(models.Model):
 
 class subject_batch(models.Model):
     subject_code=models.ForeignKey('subject',db_column='sub_code',on_delete=models.CASCADE)
-    batch_name=models.CharField()
+    batch_name=models.CharField(max_length=200)
 
     def __str__(self):
         return self.subject_code+" "+self.batch_name
@@ -123,7 +123,7 @@ class subject(models.Model):
 
 class subject_scheme(models.Model):
     sub_code=models.ForeignKey('subject',db_column='sub_code',on_delete=models.CASCADE)
-    sub_load=models.ImageField()
+    sub_load=models.IntegerField()
     sub_theory_class=models.IntegerField()
     sub_practical_class=models.IntegerField()
     sub_practical_class=models.IntegerField()
@@ -154,7 +154,7 @@ class timeslot_day(models.Model):
     resource_type=models.BooleanField()
     resource_id=models.IntegerField()
     faculty_subject_table_id=models.ForeignKey('faculty_subject',on_delete=models.CASCADE)
-    semester_table_id=models.ForeignKey('semester',on-on_delete=models.CASCADE)
+    semester_table_id=models.ForeignKey('semester',on_delete=models.CASCADE)
     shift_table_id=models.ForeignKey('shift',on_delete=models.CASCADE)
 
     def __str__(self):
