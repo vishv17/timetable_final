@@ -143,7 +143,7 @@ class faculty(models.Model):
 
 class faculty_subject(models.Model):
     faculty_id=models.ForeignKey('faculty',db_column='faculty_id',on_delete=models.CASCADE)
-    sub_code=models.ForeignKey('subject',db_column='subject',on_delete=models.CASCADE)
+    sub_code=models.ForeignKey('subject',db_column='sub_code',on_delete=models.CASCADE)
 
     def __str__(self):
         return self.faculty_id+" "+self.sub_code
