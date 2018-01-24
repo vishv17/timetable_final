@@ -128,7 +128,7 @@ class subject_scheme(models.Model):
     sub_load=models.IntegerField()
     sub_theory_class=models.IntegerField()
     sub_practical_class=models.IntegerField()
-    sub_tutorial_class=models.IntegerField()
+    sub_tutorial_class=models.IntegerField(default=0)
 
     def __str__(self):
         return self.sub_code+" "+self.sub_load
