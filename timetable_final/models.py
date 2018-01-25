@@ -67,6 +67,7 @@ class semester(models.Model):
     semester_name=models.CharField(max_length=200)
     shift_table_id=models.ForeignKey('shift',on_delete=models.CASCADE)
     descipline_course_table_id=models.ForeignKey('descipline_course',on_delete=models.CASCADE)
+    term=models.CharField(max_length=200,default="odd")
 
     def __str__(self):
         return self.semester_name+" "+self.shift_table_id+" "+self.descipline_course_table_id
