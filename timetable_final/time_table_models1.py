@@ -179,6 +179,7 @@ class TimetableFinalSemester(BaseModel):
     descipline_course_table_id = ForeignKeyField(db_column='descipline_course_table_id_id', rel_model=TimetableFinalDesciplineCourse, to_field='id')
     semester_name = CharField()
     shift_table_id = ForeignKeyField(db_column='shift_table_id_id', rel_model=TimetableFinalShift, to_field='id')
+    term = CharField()
 
     class Meta:
         db_table = 'timetable_final_semester'
