@@ -48,16 +48,18 @@ class classroom(models.Model):
     def __str__(self):
         return self.classroom_name
 class lab_available(models.Model):
-    lab_id=models.ForeignKey('lab',db_column='lab_id',on_delete=models.CASCADE)
+    day_id=models.ForeignKey('day',on_delete=models.CASCADE,null=True)
     timeslot_id=models.ForeignKey('timeslot',on_delete=models.CASCADE)
+    lab_id=models.ForeignKey('lab',db_column='lab_id',on_delete=models.CASCADE)
     availability=models.BooleanField(default=True)
 
     def __str__(self):
         return self.timeslot_id+" "+self.lab_id+" "+self.availability
 
 class classroom_available(models.Model):
-    classroom_id=models.ForeignKey('classroom',db_column='classroom_id',on_delete=models.CASCADE)
+    day_id=models.ForeignKey('day',on_delete=models.CASCADE,null=True)
     timeslot_id=models.ForeignKey('timeslot',on_delete=models.CASCADE)
+    classroom_id=models.ForeignKey('classroom',db_column='classroom_id',on_delete=models.CASCADE)
     availability=models.BooleanField(default=True)
 
     def __str__(self):

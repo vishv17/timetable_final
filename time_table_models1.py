@@ -137,6 +137,12 @@ class TimetableFinalClassroom(BaseModel):
     class Meta:
         db_table = 'timetable_final_classroom'
 
+class TimetableFinalDay(BaseModel):
+    day_name = CharField()
+
+    class Meta:
+        db_table = 'timetable_final_day'
+
 class TimetableFinalShift(BaseModel):
     shift_name = CharField()
     shift_time = CharField()
@@ -154,16 +160,11 @@ class TimetableFinalTimeslot(BaseModel):
 class TimetableFinalClassroomAvailable(BaseModel):
     availability = IntegerField()
     classroom = ForeignKeyField(db_column='classroom_id', rel_model=TimetableFinalClassroom, to_field='classroom')
+    day_id = ForeignKeyField(db_column='day_id_id', null=True, rel_model=TimetableFinalDay, to_field='id')
     timeslot_id = ForeignKeyField(db_column='timeslot_id_id', rel_model=TimetableFinalTimeslot, to_field='id')
 
     class Meta:
         db_table = 'timetable_final_classroom_available'
-
-class TimetableFinalDay(BaseModel):
-    day_name = CharField()
-
-    class Meta:
-        db_table = 'timetable_final_day'
 
 class TimetableFinalFaculty(BaseModel):
     descipline_course_table_id = ForeignKeyField(db_column='descipline_course_table_id_id', rel_model=TimetableFinalDesciplineCourse, to_field='id')
@@ -211,6 +212,7 @@ class TimetableFinalLab(BaseModel):
 
 class TimetableFinalLabAvailable(BaseModel):
     availability = IntegerField()
+    day_id = ForeignKeyField(db_column='day_id_id', null=True, rel_model=TimetableFinalDay, to_field='id')
     lab = ForeignKeyField(db_column='lab_id', rel_model=TimetableFinalLab, to_field='lab')
     timeslot_id = ForeignKeyField(db_column='timeslot_id_id', rel_model=TimetableFinalTimeslot, to_field='id')
 
@@ -273,3 +275,4 @@ class TimetableFinalTimeslotDay(BaseModel):
 
     class Meta:
         db_table = 'timetable_final_timeslot_day'
+

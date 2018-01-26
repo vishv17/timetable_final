@@ -34,12 +34,12 @@ def timetable_gen(request):
     shift="morning"
 
     day_list=[]
-    timeslot_list=[]
+    timeslot_list1=[]
     semester_list=[]
     temp_course=TimetableFinalCourse.select().where(TimetableFinalCourse.course_name==course).get()
-    print(temp_course.course)
+    # print(temp_course.course)
     temp_discipline=TimetableFinalDescipline.select().where(TimetableFinalDescipline.descipline_name==discipline).get()
-    print(temp_discipline.id)
+    # print(temp_discipline.id)
     # temp_course_discipline=TimetableFinalDesciplineCourse.select().where((TimetableFinalDesciplineCourse.descipline_table_id==temp_discipline.id)&(TimetableFinalDesciplineCourse.course==temp_course.id)).get()
     temp_course_discipline=TimetableFinalDesciplineCourse.select().where((TimetableFinalDesciplineCourse.descipline_table_id==temp_discipline.id)&(TimetableFinalDesciplineCourse.course==temp_course.course)).get()
     temp_sem=TimetableFinalSemester.select().where((TimetableFinalSemester.term==term)&(TimetableFinalSemester.descipline_course_table_id==temp_course_discipline.id))
@@ -52,7 +52,7 @@ def timetable_gen(request):
 
     temp_timeslot=TimetableFinalTimeslot.select()
     for t in temp_timeslot:
-        timeslot_list.append(str(t.timeslot_name))
+        timeslot_list1.append(str(t.timeslot_name))
 
 
     course_dict={}
@@ -65,10 +65,41 @@ def timetable_gen(request):
         temp_sem=TimetableFinalSemester.select().where(TimetableFinalSemester.semester_name==sem).get()
         temp_sub=TimetableFinalSubject.select().where(TimetableFinalSubject.semester_table_id==temp_sem.id)
         subject1={}
+        subject_list=[]
         for s in temp_sub:
             temp_sub_scheme=TimetableFinalSubjectScheme.select().where(TimetableFinalSubjectScheme.sub_code==s.sub_code).get()
-            subject1[str(s.sub_name)]={'sub_code':s.sub_code,'sub_load':temp_sub_scheme.sub_load,'practical_load':temp_sub_scheme.sub_practical_class,'theory_load':temp_sub_scheme.sub_theory_class,'tutorial_load':temp_sub_scheme.sub_tutorial_class}
-        sub_detail[sem]=subject1
+            subject_list.append((s.sub_name,temp_sub_scheme.sub_load,s.sub_code,temp_sub_scheme.sub_practical_class,temp_sub_scheme.sub_theory_class,temp_sub_scheme.sub_tutorial_class))
+        subject_list.sort(key=lambda tup:tup[1],reverse=False)
+        # print(subject_list)
+        list_temp=[]
+        for sub in subject_list:
+            list_temp.append({'sub_name':sub[0],'sub_code':sub[2],'sub_load':sub[1],'practical_load':sub[3],'theory_load':sub[4],'tutorial_load':sub[5]})
+            # subject1[str(s.sub_name)]={'sub_code':s.sub_code,'sub_load':temp_sub_scheme.sub_load,'practical_load':temp_sub_scheme.sub_practical_class,'theory_load':temp_sub_scheme.sub_theory_class,'tutorial_load':temp_sub_scheme.sub_tutorial_class}
+        sub_detail[sem]=list_temp
+
+        for sem in semester_list:
+            temp1=sub_detail[sem]
+            size_of_list=len(temp1)
+            x=len(timeslot_list1)
+            timeslot_len=0
+            timeslot_list=[]
+            if x>size_of_list:
+                timeslot_len=size_of_list*2
+                for t in range(1,timeslot_len+1):
+                    timeslot_list.append(timeslot_list1[t])
+            else:
+                timeslot_list=timeslot_list1
+            days_dict={}
+            sub_lab_counter={}
+            day_lab_counter={}
+            for d in day_list:
+                faculty_count={}
+                subject_count={}
+                lab_available={}
+                classroom_available={}
+                timeslot_dict={}
+
+
 
     db.close()
     return HttpResponse(json.dumps(sub_detail), content_type="application/json")
