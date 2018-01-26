@@ -31,11 +31,11 @@ def timetable_gen(request):
 
     day_list=[]
     timeslot_list=[]
+    semester_list=[]
 
-    if term=="odd":
-        semester_list=[1,3,5,7]
-    else:
-        semester_list=[2,4,6,8]
+    temp_sem=TimetableFinalSemester.select().where(TimetableFinalSemester.term==term)
+    for sem in temp_sem:
+        semester_list.append(sem.semester_name)
 
     temp_day=TimetableFinalDay.select()
     for d in temp_day:
@@ -53,4 +53,5 @@ def timetable_gen(request):
 
     sub_detail={}
     for sem in semester_list:
-        temp_sem=TimetableFinalSemester.select().where(TimetableFinalSemester.semester_name)
+        temp_sem=TimetableFinalSemester.select().where(TimetableFinalSemester.semester_name==sem).get()
+        
