@@ -59,7 +59,7 @@ def timetable_gen(request):
     discipline_dict={}
     shift_dict={}
     timetable_dict={}
-
+    timeslot_list=[]
     sub_detail={}
     for sem in semester_list:
         temp_sem=TimetableFinalSemester.select().where(TimetableFinalSemester.semester_name==sem).get()
@@ -77,29 +77,46 @@ def timetable_gen(request):
             # subject1[str(s.sub_name)]={'sub_code':s.sub_code,'sub_load':temp_sub_scheme.sub_load,'practical_load':temp_sub_scheme.sub_practical_class,'theory_load':temp_sub_scheme.sub_theory_class,'tutorial_load':temp_sub_scheme.sub_tutorial_class}
         sub_detail[sem]=list_temp
 
-        for sem in semester_list:
-            temp1=sub_detail[sem]
-            size_of_list=len(temp1)
-            x=len(timeslot_list1)
-            timeslot_len=0
-            timeslot_list=[]
-            if x>size_of_list:
-                timeslot_len=size_of_list*2
-                for t in range(1,timeslot_len+1):
-                    timeslot_list.append(timeslot_list1[t])
-            else:
-                timeslot_list=timeslot_list1
-            days_dict={}
-            sub_lab_counter={}
-            day_lab_counter={}
+    for sem in semester_list:
+        temp1=sub_detail[sem]
+        size_of_list=len(temp1)*2
+        # print(size_of_list)
+        x=len(timeslot_list1)
+        timeslot_len=0
+        if x>size_of_list:
+            timeslot_len=size_of_list
+            for t in range(1,timeslot_len+1):
+                timeslot_list.append(timeslot_list1[t])
+        else:
+            timeslot_list=timeslot_list1
+        days_dict={}
+        sub_lab_counter={}
+        day_lab_counter={}
+        lab_available={}
+        classroom_available={}
+        for lab in TimetableFinalLabAvailable.select():
+            days_availability={}
             for d in day_list:
-                faculty_count={}
-                subject_count={}
-                lab_available={}
-                classroom_available={}
-                timeslot_dict={}
-
-
+                timeslot_availability={}
+                for t in timeslot_list:
+                    timeslot_availability[t]=1
+                days_availability[d]=timeslot_availability
+            lab_available[str(lab.lab.lab_name)]=days_availability
+        for classroom in TimetableFinalClassroomAvailable.select():
+            days_availability={}
+            for d in day_list:
+                timeslot_availability={}
+                for t in timeslot_list:
+                    timeslot_availability[t]=1
+                days_availability[d]=timeslot_availability
+            classroom_available[str(classroom.classroom.classroom_name)]=days_availability
+    for sem in semester_list:
+        days_dict={}
+        for d in day_list:
+            faculty_count={}
+            subject_count={}
+            timeslot_dict={}
+            for t in timeslot_list:
 
     db.close()
-    return HttpResponse(json.dumps(sub_detail), content_type="application/json")
+    return HttpResponse(json.dumps(classroom_available), content_type="application/json")
